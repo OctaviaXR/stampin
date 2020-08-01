@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <meta content="utf-8" http-equiv="encoding" />
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm/dist/tf-backend-wasm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/build/three.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/MTLLoader.js"></script>
+    <script src="js/three.js/loaders/GLTFLoader.js"></script>
+    <script src="js/three.js/postprocessing/EffectComposer.js"></script>
+    <script src="js/three.js/postprocessing/RenderPass.js"></script>
+    <script src="js/three.js/postprocessing/ShaderPass.js"></script>
+    <script src="js/three.js/shaders/CopyShader.js"></script>
+    <script src="js/osc.min.js"></script>
+    <script src="js/1euro.js"></script>
+    <script src="js/Mach1SoundPlayer.js"></script>
+    <script src="js/Mach1Decode.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/M1SpatialAudioPlayer.js"></script>
+    <script src="js/tracker.js"></script>
+    <script src="js/scene.js"></script>
+    <script src="js/main.js"></script>
+
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            font-family: Helvetica, sans-serif;
+        }
+
+        #info {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main" style="display:none;">
+        <div class="container">
+            <div class="canvas-wrapper" id="3dview"></div>
+        </div>
+        <div class="canvas-wrapper" id="webcam">
+            <canvas id="output"></canvas>
+            <video id="video" playsinline
+                style="-webkit-transform: scaleX(-1); transform: scaleX(-1); visibility: hidden; width: auto; height: auto;"></video>
+        </div>
+    </div>
+    </div>
+    <div id="info">loading...</div>
+</body>
+
+</html>
