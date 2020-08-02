@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // set your static server
 const publicPath = path.resolve(`${__dirname}/public`);
