@@ -18,12 +18,15 @@ class Scene {
 
     init() {
         // camera
-        this.initCameraPosition = new THREE.Vector3(-3.2, 1.1, 0.6);
-        this.camera.position.set(this.initCameraPosition.x, this.initCameraPosition.y, this.initCameraPosition.z);
+        this.initCamera = new THREE.Object3D(); // object that has camera as child
+        this.initCamera.position.set(-3.2, 1.1, 0.6);
+        this.initCamera.rotation.set(0, 0, 0);
+        this.initCamera.add(this.camera);
+        this.scene.add(this.initCamera);
 
         // lighting
         this.light = new THREE.PointLight(0xFFFFFF, 2);
-        this.light.position.set(this.initCameraPosition.x, this.initCameraPosition.y + 1, this.initCameraPosition.z);
+        this.light.position.set(this.initCamera.position.x, this.initCamera.position.y + 1, this.initCamera.position.z);
         this.scene.add(this.light);
 
         // model
@@ -48,6 +51,7 @@ class Scene {
 
     animate() {
         requestAnimationFrame(() => this.animate());
+        TWEEN.update();
         if (window.yaw != null) this.yaw = this.fYaw.filter(window.yaw);
         if (window.pitch != null) this.pitch = this.fPitch.filter(window.pitch);
         if (window.roll != null) this.roll = this.fRoll.filter(window.roll);
@@ -59,16 +63,19 @@ class Scene {
         const cameraPostionXRange = 0.7;
         const cameraPostionYRange = 0.7;
         const cameraPostionZRange = 0.7;
-        const cameraPostionX = this.initCameraPosition.x + window.nomalizedPosition.x * cameraPostionXRange - (cameraPostionXRange / 2);
-        const cameraPostionY = this.initCameraPosition.y + (1 - window.nomalizedPosition.y) * cameraPostionYRange - (cameraPostionYRange / 2);
-        const cameraPostionZ = this.initCameraPosition.z + (1 - window.nomalizedPosition.z) * cameraPostionZRange - (cameraPostionZRange / 2);
+        const cameraPostionX = window.nomalizedPosition.x * cameraPostionXRange - (cameraPostionXRange / 2);
+        const cameraPostionY = (1 - window.nomalizedPosition.y) * cameraPostionYRange - (cameraPostionYRange / 2);
+        const cameraPostionZ = (1 - window.nomalizedPosition.z) * cameraPostionZRange - (cameraPostionZRange / 2);
         this.camera.position.set(cameraPostionX, cameraPostionY, cameraPostionZ);
 
         // change camera rotation
-        const cameraRotationXDeg = this.pitch * 0.5;
-        const cameraRotationYDeg = -this.yaw * 0.5;
-        const cameraRotationZDeg = this.roll * 0.5;
-        this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
+        const cameraRotationXAmount = 0.5;
+        const cameraRotationYAmount = 0.5;
+        const cameraRotationZAmount = 0.5;
+        const cameraRotationXDeg = this.pitch * cameraRotationXAmount;
+        const cameraRotationYDeg = this.yaw * cameraRotationYAmount;
+        const cameraRotationZDeg = this.roll * cameraRotationZAmount;
+        this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
 
         // Check and reconnect OSC
         // Apply orientation as output OSC messages

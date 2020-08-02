@@ -1,8 +1,7 @@
-window.modeTracker = "facetracker";
 const VIDEO_WIDTH = 640;
 const VIDEO_HEIGHT = 480;
 
-let model, ctx, videoWidth, videoHeight, video, canvas;
+let model, videoWidth, videoHeight, video, canvas;
 
 const mobile = isMobile();
 
@@ -32,7 +31,6 @@ window.nomalizedMouth = 0;
 
 async function renderPrediction() {
     const predictions = await model.estimateFaces(video);
-    ctx.drawImage(video, 0, 0, videoWidth, videoHeight, 0, 0, canvas.width, canvas.height);
 
     if (predictions.length > 0) {
         predictions.forEach((prediction) => {
@@ -59,30 +57,6 @@ async function renderPrediction() {
             window.nomalizedMouth = lerp(window.nomalizedMouth, map(lipsLowerInnerCenterY - lipsUpperInnerCenterY, 0, VIDEO_HEIGHT / 4, 0, 1) / nomalizedPositionZ, lerpAmount);
 
             // calculate yaw, pitch, roll
-            const keypoints = prediction.scaledMesh;
-
-            for (let i = 0; i < keypoints.length; i++) {
-                const x = keypoints[i][0];
-                const y = keypoints[i][1];
-
-                ctx.fillStyle = "white";
-                ctx.fillRect(x, y, 2, 2);
-
-                if (parseInt(controls.nPoint) == i) {
-                    ctx.fillStyle = "red";
-                    ctx.fillRect(x, y, 6, 6);
-                }
-
-                if (i == 10 || i == 152) {
-                    ctx.fillStyle = "green";
-                    ctx.fillRect(x, y, 6, 6);
-                }
-                if (i == 234 || i == 454) {
-                    ctx.fillStyle = "yellow";
-                    ctx.fillRect(x, y, 6, 6);
-                }
-            }
-
             var pTop = new THREE.Vector3(prediction.mesh[10][0], prediction.mesh[10][1], prediction.mesh[10][2]);
             var pBottom = new THREE.Vector3(prediction.mesh[152][0], prediction.mesh[152][1], prediction.mesh[152][2]);
             var pLeft = new THREE.Vector3(prediction.mesh[234][0], prediction.mesh[234][1], prediction.mesh[234][2]);
@@ -113,15 +87,9 @@ async function renderPrediction() {
             if (roll < -parseFloat(controls.FOV)) {
                 roll = -parseFloat(controls.FOV);
             }
-            yawOptimized = yaw * parseFloat(controls.yawMultiplier);
-            pitchOptimized = pitch * parseFloat(controls.pitchMultiplier);
-            rollOptimized = roll * parseFloat(controls.rollMultiplier);
-
-            if (window.modeTracker == "facetracker") {
-                window.yaw = yawOptimized;
-                window.pitch = pitchOptimized;
-                window.roll = rollOptimized;
-            }
+            window.yaw = yaw * parseFloat(controls.yawMultiplier);
+            window.pitch = pitch * parseFloat(controls.pitchMultiplier);
+            window.roll = roll * parseFloat(controls.rollMultiplier);
         });
     }
     requestAnimationFrame(renderPrediction);
@@ -149,12 +117,6 @@ async function trackerMain() {
     const canvasContainer = document.querySelector(".canvas-wrapper");
     canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
 
-    ctx = canvas.getContext("2d");
-    ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
-    ctx.fillStyle = "#32EEDB";
-    ctx.strokeStyle = "#32EEDB";
-
     model = await facemesh.load({
         maxFaces: 1
     });
@@ -167,7 +129,7 @@ async function trackerMain() {
             info.innerHTML = "";
             info.style.display = "none";
             document.getElementById("main").style.display = "block";
-            Play();
+            onLoadingFinished();
         }
     }, 1000);
 }
