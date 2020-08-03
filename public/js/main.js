@@ -8,7 +8,13 @@ function createScene() {
     glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
 }
 
+// called after audio and gltf assets are loaded
 function onLoadingFinished() {
+
+    // change the div states
+    document.getElementById("info").style.display = "none";
+    document.getElementById("main").style.display = "block";
+
     // play the audio file
     Play();
 
@@ -45,11 +51,6 @@ function onLoadingFinished() {
     }, 175000);
 }
 
-function main() {
-    trackerMain();
-    createScene();
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.addEventListener("ended", function () {
@@ -59,6 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const videoContainer = document.getElementById("videoContainer");
         videoContainer.style.display = "block";
         videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
-        main();
+        trackerMain();
     });
 })

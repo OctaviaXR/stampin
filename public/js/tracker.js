@@ -96,8 +96,6 @@ async function renderPrediction() {
 }
 
 async function trackerMain() {
-    var info = document.getElementById("info");
-    info.innerHTML = "loading...";
     document.getElementById("main").style.display = "none";
     document.getElementById("webcam").style.display = "none";
 
@@ -125,12 +123,8 @@ async function trackerMain() {
     // wait for loaded audio
     var timer = setInterval(function () {
         if (sound.isReady) {
-            console.log("sound is ready");
             clearInterval(timer);
-            info.innerHTML = "";
-            info.style.display = "none";
-            document.getElementById("main").style.display = "block";
-            onLoadingFinished();
+            createScene();
         }
     }, 1000);
 }
