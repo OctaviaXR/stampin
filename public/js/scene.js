@@ -2,7 +2,8 @@ class Scene {
     constructor(rendererWidth, rendererHeight, backgroundColor) {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.001, 1000);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        // this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias: false }); //faster render
         this.renderer.setSize(rendererWidth, rendererHeight);
         this.renderer.setClearColor(backgroundColor);
         document.getElementById("3dview").appendChild(this.renderer.domElement);
@@ -22,6 +23,7 @@ class Scene {
         const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
         // const url = "assets/models/final-4/yiting-scene.gltf"; // draco
         loader.load(url, (gltf) => {
+
             const box = new THREE.Box3().setFromObject(gltf.scene); // original
             const center = box.getCenter(new THREE.Vector3()); // original
             gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
@@ -50,8 +52,18 @@ class Scene {
         this.light.position.set(this.initCamera.position.x, this.initCamera.position.y + 1, this.initCamera.position.z);
         this.scene.add(this.light);
 
-        // video
-        this.addVideoPlaneMeshes();
+        // videos
+        const videoFile = document.getElementById('videoFile');
+        const videoFileLeft = document.getElementById('videoFileLeft');
+        const videoFileLeft2 = document.getElementById('videoFileLeft2');
+        const videoFileLeft3 = document.getElementById('videoFileLeft3');
+        //theater vid - should replace the demo vid 
+        this.addVideoPlaneMeshes(videoFile, 0.4, 0.2, -3.305, 1.42, -0.05, 0, 0, 0, true);
+
+        // sky vid
+        this.addVideoPlaneMeshes(videoFileLeft, 0.7, 0.7, -4.04, 1.32, 0.6, 0, Math.PI / 2, 0, false);
+
+        //theater vid 
 
         // events
         window.addEventListener("resize", () => {
@@ -59,35 +71,6 @@ class Scene {
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
         });
-    }
-
-    addVideoPlaneMeshes() {
-        // video plane mesh
-        const videoFile = document.getElementById("videoFile");
-        const videoTexture = new THREE.VideoTexture(videoFile);
-        videoTexture.needsUpdate;
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.format = THREE.RGBFormat;
-        videoTexture.crossOrigin = "anonymous";
-        const videoWidth = 0.4;
-        const videoHeight = 0.2;
-        const videoPlaneMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(videoWidth, videoHeight),
-            new THREE.MeshBasicMaterial({ map: videoTexture })
-        );
-
-        videoPlaneMesh.position.set(-3.305, 1.42, -0.05);
-        this.scene.add(videoPlaneMesh);
-
-        // video frame plane mesh
-        const videoFramePlaneMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(videoWidth + 0.02, videoHeight + 0.02),
-            new THREE.MeshBasicMaterial({ color: 0xbebebe })
-        );
-
-        videoFramePlaneMesh.position.set(videoPlaneMesh.position.x, videoPlaneMesh.position.y, videoPlaneMesh.position.z - 0.001);
-        this.scene.add(videoFramePlaneMesh);
     }
 
     animate() {
@@ -122,9 +105,60 @@ class Scene {
         if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
             console.log("mouth is opened during the theme 1");
             this.hasMouthOpened = true;
-            
+
+            //should figure out the opacity of the video texture - create overlay effect would be better 
+            // rain-window - hover on top + paintings 
+
+            this.addVideoPlaneMeshes(videoFileLeft2, 0.7, 0.7, -4.03, 1.32, 0.6, 0, Math.PI / 2, 0, false);
+            this.addVideoPlaneMeshes(videoFileLeft3, 0.7, 0.7, -4.02, 1.32, 0.6, 0, Math.PI / 2, 0, false);
 
         }
         this.renderer.render(this.scene, this.camera);
+    }
+
+
+
+    // addVideoPlaneMeshes(videoFile,0.4,0.2,0,0,0,0,Math.PI/2,0,true);
+
+    addVideoPlaneMeshes(video, w, h, posX, posY, posZ, rotX, rotY, rotZ, border) {
+
+        // video plane mesh
+        const videoTexture = new THREE.VideoTexture(video);
+        videoTexture.needsUpdate;
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        videoTexture.format = THREE.RGBFormat;
+        videoTexture.crossOrigin = "anonymous";
+
+        const videoWidth = w;
+        const videoHeight = h;
+
+        // make la
+        const videoPlaneMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(videoWidth, videoHeight),
+            new THREE.MeshBasicMaterial({
+                map: videoTexture
+            })
+        );
+
+        videoPlaneMesh.position.set(posX, posY, posZ);
+        videoPlaneMesh.rotation.set(rotX, rotY, rotZ);
+
+        this.scene.add(videoPlaneMesh);
+
+        //create a border if it is true
+        if (border) {
+            // video frame plane mesh
+            const videoFramePlaneMesh = new THREE.Mesh(
+                new THREE.PlaneGeometry(videoWidth + 0.02, videoHeight + 0.02),
+                new THREE.MeshBasicMaterial({ color: 0xbebebe })
+            );
+
+            videoFramePlaneMesh.position.set(videoPlaneMesh.position.x, videoPlaneMesh.position.y, videoPlaneMesh.position.z - 0.001);
+
+            this.scene.add(videoFramePlaneMesh);
+        }
+
+
     }
 }

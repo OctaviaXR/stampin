@@ -79,8 +79,7 @@
             <H2>Let's begin here.</H2>
             <!-- note: auto play doesn't seem to work in Chrome when deployed in heroku -->
             <audio id="audioPlayer" controls autoplay>
-                <!-- <audio controls> -->
-                <source src="/public/assets/music/" >
+                    <source src="assets/sound/Stamping in the Graveyard (Electric Dreams Final).mp3" type="audio/mp3">
                 <div style="border: 1px solid gray ; padding: 8px ;">
                     Sorry, your browser does not support the <audio> tag used in this demo.
                 </div>
@@ -91,6 +90,23 @@
     <video id="videoFile" playsinline style="display:none">
         <source src="assets/video/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
+
+    <video id="videoFileLeft" playsinline style="display:none">
+        <source src="assets/video/smaller-outsideairplane.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+
+    <!-- rainwindow -->
+    <video id="videoFileLeft2" playsinline style="display:none; opacity: 0.4">
+        <source src="assets/video/window-rain.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+    <!-- calligraphy -->
+    <video id="videoFileLeft3" playsinline style="display:none">
+        <source src="assets/video/chinese-painting-animated.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+
+    <!-- <video id="videoFile" playsinline style="display:none">
+        <source src="assets/video/outsideairplane.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video> -->
 
     <!-- should add theater door video and calligraphy video -->
 
