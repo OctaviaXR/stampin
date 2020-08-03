@@ -44,12 +44,6 @@ function main() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const audioPlayer = document.getElementById("audioPlayer");
-    try {
-        audioPlayer.play();
-    }
-    catch (err) {
-        console.log("could not play audio in startup")
-    }
     audioPlayer.addEventListener("ended", function () {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
