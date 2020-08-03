@@ -45,6 +45,7 @@ function main() {
 document.addEventListener('DOMContentLoaded', () => {
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.play();
+    audioPlayer.muted = false;
     audioPlayer.addEventListener("ended", function () {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
