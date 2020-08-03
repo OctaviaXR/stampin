@@ -14,6 +14,16 @@ function onLoadingFinished() {
     // play the audio file
     Play();
 
+    // play the video file after 5 seconds
+    setTimeout(() => {
+        const videoFile = document.getElementById("videoFile");
+        videoFile.play();
+        videoFile.muted = true; // mute audio
+        videoFile.addEventListener("play", function () {
+            this.currentTime = 3;
+        }, false);
+    }, 5000);
+
     // rotate the camera view on each theme
     const duration = 3000;
     const easing = TWEEN.Easing.Cubic.InOut;

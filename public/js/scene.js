@@ -15,7 +15,7 @@ class Scene {
         this.hasMouthOpened = false;
     }
 
-    init() { /////
+    init() {
         // camera
         this.initCamera = new THREE.Object3D(); // object that has camera as child
         this.initCamera.position.set(-3.2, 1.1, 0.6); // original
@@ -46,12 +46,44 @@ class Scene {
             this.scene.add(gltf.scene);
         });
 
+        // video
+        this.addVideoPlaneMeshes();
+
         // events
         window.addEventListener("resize", () => {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
         });
+    }
+
+    addVideoPlaneMeshes() {
+        // video plane mesh
+        const videoFile = document.getElementById("videoFile");
+        const videoTexture = new THREE.VideoTexture(videoFile);
+        videoTexture.needsUpdate;
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        videoTexture.format = THREE.RGBFormat;
+        videoTexture.crossOrigin = "anonymous";
+        const videoWidth = 0.4;
+        const videoHeight = 0.2;
+        const videoPlaneMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(videoWidth, videoHeight),
+            new THREE.MeshBasicMaterial({ map: videoTexture })
+        );
+
+        videoPlaneMesh.position.set(-3.305, 1.42, -0.05);
+        this.scene.add(videoPlaneMesh);
+
+        // video frame plane mesh
+        const videoFramePlaneMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(videoWidth + 0.02, videoHeight + 0.02),
+            new THREE.MeshBasicMaterial({ color: 0xbebebe })
+        );
+
+        videoFramePlaneMesh.position.set(videoPlaneMesh.position.x, videoPlaneMesh.position.y, videoPlaneMesh.position.z - 0.001);
+        this.scene.add(videoFramePlaneMesh);
     }
 
     animate() {
@@ -81,7 +113,7 @@ class Scene {
         const cameraRotationYDeg = this.yaw * cameraRotationYAmount;
         const cameraRotationZDeg = this.roll * cameraRotationZAmount;
         this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
-        
+
         // if mouth is opened during the theme 1
         if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
             console.log("mouth is opened during the theme 1");

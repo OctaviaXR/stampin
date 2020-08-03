@@ -73,12 +73,11 @@
     </style>
 </head>
 
-<!-- need help: auto play this clip first then start the vr experience when scrolling down. -->
-
 <body>
     <div class="container" id="audioContainer">
         <div class="wrapper">
             <H2>Let's begin here.</H2>
+            <!-- note: auto play doesn't seem to work in Chrome when deployed in heroku -->
             <audio id="audioPlayer" controls autoplay>
                 <!-- <audio controls> -->
                 <source src="assets/audio/Exodus (Mastered).mp3" type="audio/mp3">
@@ -89,12 +88,11 @@
         </div>
     </div>
 
-    <video id="videoFiles" loop crossOrigin="anonymous" playsinline style="display:none">
-        <source src="assets/video/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+    <video id="videoFile" playsinline style="display:none">
         <source src="assets/video/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
 
-    <!-- should make it play after the first audio is finished -->
+    <!-- this will be visible when audio playback ends -->
     <div class="container" id="videoContainer">
         <div id="main">
             <div class="canvas-wrapper" id="3dview"></div>
