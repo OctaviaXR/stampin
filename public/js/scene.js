@@ -79,19 +79,19 @@ class Scene {
 
         // Check and reconnect OSC
         // Apply orientation as output OSC messages
-        if (this.osc.status() == OSC.STATUS.IS_OPEN) {
-            /*
-            Receive OSC message with address "/orientation" and three float arguements
+//         if (this.osc.status() == OSC.STATUS.IS_OPEN) {
+//             /*
+//             Receive OSC message with address "/orientation" and three float arguements
     
-            Yaw (left -> right | where rotating left is negative)
-            Pitch (down -> up | where rotating down is negative)
-            Roll (top-pointing-left -> top-pointing-right | where rotating top of object left is negative)
+//             Yaw (left -> right | where rotating left is negative)
+//             Pitch (down -> up | where rotating down is negative)
+//             Roll (top-pointing-left -> top-pointing-right | where rotating top of object left is negative)
     
-            */
-            this.osc.send(new OSC.Message("/orientation", this.yaw, this.pitch, this.roll));
-        } else if (this.osc.status() == OSC.STATUS.IS_CLOSED) {
-            this.osc.open({ port: 9898 });
-        }
+//             */
+//              this.osc.send(new OSC.Message("/orientation", this.yaw, this.pitch, this.roll));
+//         } else if (this.osc.status() == OSC.STATUS.IS_CLOSED) {
+//             this.osc.open({ port: 9898 });
+//         }
         this.renderer.render(this.scene, this.camera);
     }
 }
