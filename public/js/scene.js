@@ -32,6 +32,7 @@ class Scene {
         // model
         const loader = new THREE.GLTFLoader();
         const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf";
+        // const url = "assets/models/final-4/yiting-scene.gltf";
         loader.load(url, (gltf) => {
             const box = new THREE.Box3().setFromObject(gltf.scene);
             const center = box.getCenter(new THREE.Vector3());

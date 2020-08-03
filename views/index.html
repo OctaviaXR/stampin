@@ -36,6 +36,8 @@
 
         body {
             font-family: Helvetica, sans-serif;
+            display: block;
+
         }
 
         #info {
@@ -46,21 +48,58 @@
             font-size: 4em;
             font-weight: bold;
         }
+
+        .container{
+
+            margin: 0 auto;
+            height: 100vh;
+            width: auto;
+            text-align: center;
+        
+        }
+        .wrapper{
+            padding-top:30vh;
+
+        }
+
+        h2{
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 
+<!-- need help: auto play this clip first then start the vr experience when scrolling down. -->
 <body>
-    <div id="main" style="display:none;">
-        <div class="container">
+    <div class="container">
+        <div class="wrapper">
+        <H2>Let's begin here.</H2>
+       <audio controls autoplay>
+        <!-- <audio controls> -->
+            <source src="/public/assets/sound/Exodus (Mastered).mp3" type="audio/mp3">
+            <div style="border: 1px solid gray ; padding: 8px ;">
+                Sorry, your browser does not support the <audio> tag used in this demo.
+            </div>
+        </audio>
+    </div>
+    </div>
+
+   
+
+    <!-- should make it play after the first audio is finished -->
+    <div class="container">
+            <h2>Meet me here.</h2>
+ 
+            <div id="main" >
+
             <div class="canvas-wrapper" id="3dview"></div>
-        </div>
+    
         <div class="canvas-wrapper" id="webcam">
             <canvas id="output"></canvas>
             <video id="video" playsinline
                 style="-webkit-transform: scaleX(-1); transform: scaleX(-1); visibility: hidden; width: auto; height: auto;"></video>
         </div>
-    </div>
-    </div>
+
+    </div>    </div>
     <div id="info">loading...</div>
 </body>
 
