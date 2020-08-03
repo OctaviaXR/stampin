@@ -51,6 +51,11 @@ function onLoadingFinished() {
     }, 175000);
 }
 
+// everything starts from here
+// 1. below listener function is called
+// 2. trackMain() function is called
+// 3. createScene() function is called
+// 4. onLoadingFinished() function is called
 document.addEventListener('DOMContentLoaded', () => {
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.addEventListener("ended", function () {
