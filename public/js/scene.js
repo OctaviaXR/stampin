@@ -122,6 +122,8 @@ class Scene {
         if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
             console.log("mouth is opened during the theme 1");
             this.hasMouthOpened = true;
+            
+
         }
         this.renderer.render(this.scene, this.camera);
     }

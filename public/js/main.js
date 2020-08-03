@@ -6,6 +6,7 @@ function createScene() {
     // initialize three.js scene
     console.log("creating three.js scene");
     glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
+    playAfter30mins();
 }
 
 // called after audio and gltf assets are loaded
@@ -14,8 +15,10 @@ function onLoadingFinished() {
     // change the div states
     document.getElementById("info").style.display = "none";
     document.getElementById("main").style.display = "block";
-
-    // play the audio file
+}
+//when the loading finished, dont play the audio file until the previous audio is played 
+// play the audio file
+function playAfter30mins() {
     Play();
 
     // play the video file after 5 seconds
@@ -49,8 +52,8 @@ function onLoadingFinished() {
         currentTheme = 3;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(-90) }, duration).easing(easing).start();
     }, 175000);
-}
 
+}
 // everything starts from here
 // 1. below listener function is called
 // 2. trackMain() function is called
@@ -62,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
         audioPlayer.src = ""; // make it no longer playable
+        // playAfter30mins();
         const videoContainer = document.getElementById("videoContainer");
         videoContainer.style.display = "block";
         videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
