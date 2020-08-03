@@ -12,14 +12,14 @@ class Scene {
         this.fYaw = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.fPitch = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.fRoll = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
-        this.osc = new OSC();
-        this.osc.open({ port: 9898 });
+        this.hasMouthOpened = false;
     }
 
     init() {
         // camera
         this.initCamera = new THREE.Object3D(); // object that has camera as child
-        this.initCamera.position.set(-3.2, 1.1, 0.6);
+        // this.initCamera.position.set(-3.2, 1.1, 0.6); // original
+        this.initCamera.position.set(-7.7, 4, 2); // draco
         this.initCamera.rotation.set(0, 0, 0);
         this.initCamera.add(this.camera);
         this.scene.add(this.initCamera);
@@ -31,14 +31,18 @@ class Scene {
 
         // model
         const loader = new THREE.GLTFLoader();
-        const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf";
-        // const url = "assets/models/final-4/yiting-scene.gltf";
+        var dracoLoader = new THREE.DRACOLoader(); // draco
+        dracoLoader.setDecoderPath("js/libs/draco/"); // draco
+        loader.setDRACOLoader(dracoLoader); // draco
+
+        // const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
+        const url = "assets/models/final-4/yiting-scene.gltf"; // draco
         loader.load(url, (gltf) => {
-            const box = new THREE.Box3().setFromObject(gltf.scene);
-            const center = box.getCenter(new THREE.Vector3());
-            gltf.scene.position.x += (gltf.scene.position.x - center.x);
-            gltf.scene.position.y += (gltf.scene.position.y - center.y);
-            gltf.scene.position.z += (gltf.scene.position.z - center.z);
+            // const box = new THREE.Box3().setFromObject(gltf.scene); // original
+            // const center = box.getCenter(new THREE.Vector3()); // original
+            // gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
+            // gltf.scene.position.y += (gltf.scene.position.y - center.y); // original
+            // gltf.scene.position.z += (gltf.scene.position.z - center.z); // original
             this.scene.add(gltf.scene);
         });
 
@@ -77,22 +81,12 @@ class Scene {
         const cameraRotationYDeg = this.yaw * cameraRotationYAmount;
         const cameraRotationZDeg = this.roll * cameraRotationZAmount;
         this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
-
-        // Check and reconnect OSC
-        // Apply orientation as output OSC messages
-//         if (this.osc.status() == OSC.STATUS.IS_OPEN) {
-//             /*
-//             Receive OSC message with address "/orientation" and three float arguements
-    
-//             Yaw (left -> right | where rotating left is negative)
-//             Pitch (down -> up | where rotating down is negative)
-//             Roll (top-pointing-left -> top-pointing-right | where rotating top of object left is negative)
-    
-//             */
-//              this.osc.send(new OSC.Message("/orientation", this.yaw, this.pitch, this.roll));
-//         } else if (this.osc.status() == OSC.STATUS.IS_CLOSED) {
-//             this.osc.open({ port: 9898 });
-//         }
+        
+        // if mouth is opened during the theme 1
+        if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
+            console.log("mouth is opened during the theme 1");
+            this.hasMouthOpened = true;
+        }
         this.renderer.render(this.scene, this.camera);
     }
 }

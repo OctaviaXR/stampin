@@ -1,9 +1,10 @@
 // variable to store our three.js scene:
 let glScene;
+let currentTheme = 0;
 
 function createScene() {
     // initialize three.js scene
-    console.log("Creating three.js scene...");
+    console.log("creating three.js scene...");
     glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
     glScene.init();
     glScene.animate();
@@ -14,26 +15,43 @@ function onLoadingFinished() {
     Play();
 
     // rotate the camera view on each theme
-    const duration = 2000;
+    const duration = 3000;
     const easing = TWEEN.Easing.Cubic.InOut;
 
     // theme 1: left
     setTimeout(() => {
+        currentTheme = 1;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(90) }, duration).easing(easing).start();
-    }, 10000);
+    }, 40000);
 
     // theme 2: front
     setTimeout(() => {
+        currentTheme = 2;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(0) }, duration).easing(easing).start();
-    }, 20000);
+    }, 65000);
 
     // theme 3: right
     setTimeout(() => {
+        currentTheme = 3;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(-90) }, duration).easing(easing).start();
-    }, 30000);
+    }, 175000);
+}
+
+function main() {
+    trackerMain();
+    createScene();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    trackerMain();
-    createScene();
+    const audioPlayer = document.getElementById("audioPlayer");
+    audioPlayer.play();
+    audioPlayer.addEventListener("ended", function () {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        audioPlayer.src = ""; // make it no longer playable
+        const videoContainer = document.getElementById("videoContainer");
+        videoContainer.style.display = "block";
+        videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
+        main();
+    });
 })

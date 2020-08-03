@@ -12,11 +12,11 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/OBJLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/MTLLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.110.0/examples/js/loaders/GLTFLoader.js"></script>
-    <script src="js/osc.min.js"></script>
     <script src="js/tween.umd.js"></script>
     <script src="js/1euro.js"></script>
     <script src="js/Mach1SoundPlayer.js"></script>
     <script src="js/Mach1Decode.js"></script>
+    <script src="js/libs/draco/DRACOLoader.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/M1SpatialAudioPlayer.js"></script>
     <script src="js/tracker.js"></script>
@@ -37,7 +37,6 @@
         body {
             font-family: Helvetica, sans-serif;
             display: block;
-
         }
 
         #info {
@@ -49,58 +48,64 @@
             font-weight: bold;
         }
 
-        .container{
-
+        .container {
             margin: 0 auto;
             height: 100vh;
             width: auto;
             text-align: center;
-        
-        }
-        .wrapper{
-            padding-top:30vh;
-
         }
 
-        h2{
+        #audioContainer {
+            display: block;
+        }
+
+        #videoContainer {
+            display: none;
+        }
+
+        .wrapper {
+            padding-top: 30vh;
+        }
+
+        h2 {
             margin-bottom: 20px;
         }
     </style>
 </head>
 
 <!-- need help: auto play this clip first then start the vr experience when scrolling down. -->
+
 <body>
-    <div class="container">
+    <div class="container" id="audioContainer">
         <div class="wrapper">
-        <H2>Let's begin here.</H2>
-       <audio controls autoplay>
-        <!-- <audio controls> -->
-            <source src="/public/assets/sound/Exodus (Mastered).mp3" type="audio/mp3">
-            <div style="border: 1px solid gray ; padding: 8px ;">
-                Sorry, your browser does not support the <audio> tag used in this demo.
-            </div>
-        </audio>
-    </div>
+            <H2>Let's begin here.</H2>
+            <audio id="audioPlayer" controls>
+                <!-- <audio controls> -->
+                <source src="assets/audio/Exodus (Mastered).mp3" type="audio/mp3">
+                <div style="border: 1px solid gray ; padding: 8px ;">
+                    Sorry, your browser does not support the <audio> tag used in this demo.
+                </div>
+            </audio>
+        </div>
     </div>
 
-   
+    <video id="videoFiles" loop crossOrigin="anonymous" playsinline style="display:none">
+        <source src="assets/video/sintel.ogv" type='video/ogg; codecs="theora, vorbis"'>
+        <source src="assets/video/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
 
     <!-- should make it play after the first audio is finished -->
-    <div class="container">
-            <h2>Meet me here.</h2>
- 
-            <div id="main" >
-
+    <div class="container" id="videoContainer">
+        <div id="main">
             <div class="canvas-wrapper" id="3dview"></div>
-    
-        <div class="canvas-wrapper" id="webcam">
-            <canvas id="output"></canvas>
-            <video id="video" playsinline
-                style="-webkit-transform: scaleX(-1); transform: scaleX(-1); visibility: hidden; width: auto; height: auto;"></video>
+            <div class="canvas-wrapper" id="webcam">
+                <canvas id="output"></canvas>
+                <video id="video" playsinline
+                    style="-webkit-transform: scaleX(-1); transform: scaleX(-1); visibility: hidden; width: auto; height: auto;"></video>
+            </div>
         </div>
-
-    </div>    </div>
-    <div id="info">loading...</div>
+        <div id="info">loading...</div>
+    </div>
 </body>
 
 </html>
