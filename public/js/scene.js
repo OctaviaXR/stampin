@@ -13,6 +13,24 @@ class Scene {
         this.fPitch = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.fRoll = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.hasMouthOpened = false;
+
+        // model
+        const loader = new THREE.GLTFLoader();
+        // var dracoLoader = new THREE.DRACOLoader(); // draco
+        // dracoLoader.setDecoderPath("js/libs/draco/"); // draco
+        // loader.setDRACOLoader(dracoLoader); // draco
+        const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
+        // const url = "assets/models/final-4/yiting-scene.gltf"; // draco
+        loader.load(url, (gltf) => {
+            const box = new THREE.Box3().setFromObject(gltf.scene); // original
+            const center = box.getCenter(new THREE.Vector3()); // original
+            gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
+            gltf.scene.position.y += (gltf.scene.position.y - center.y); // original
+            gltf.scene.position.z += (gltf.scene.position.z - center.z); // original
+            this.scene.add(gltf.scene);
+            this.init();
+            this.animate();
+        });
     }
 
     init() {
@@ -28,23 +46,6 @@ class Scene {
         this.light = new THREE.PointLight(0xFFFFFF, 2);
         this.light.position.set(this.initCamera.position.x, this.initCamera.position.y + 1, this.initCamera.position.z);
         this.scene.add(this.light);
-
-        // model
-        const loader = new THREE.GLTFLoader();
-        // var dracoLoader = new THREE.DRACOLoader(); // draco
-        // dracoLoader.setDecoderPath("js/libs/draco/"); // draco
-        // loader.setDRACOLoader(dracoLoader); // draco
-
-        const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
-        // const url = "assets/models/final-4/yiting-scene.gltf"; // draco
-        loader.load(url, (gltf) => {
-            const box = new THREE.Box3().setFromObject(gltf.scene); // original
-            const center = box.getCenter(new THREE.Vector3()); // original
-            gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
-            gltf.scene.position.y += (gltf.scene.position.y - center.y); // original
-            gltf.scene.position.z += (gltf.scene.position.z - center.z); // original
-            this.scene.add(gltf.scene);
-        });
 
         // video
         this.addVideoPlaneMeshes();

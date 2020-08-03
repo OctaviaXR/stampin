@@ -125,6 +125,7 @@ async function trackerMain() {
     // wait for loaded audio
     var timer = setInterval(function () {
         if (sound.isReady) {
+            console.log("sound is ready");
             clearInterval(timer);
             info.innerHTML = "";
             info.style.display = "none";

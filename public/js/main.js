@@ -4,10 +4,8 @@ let currentTheme = 0;
 
 function createScene() {
     // initialize three.js scene
-    console.log("creating three.js scene...");
+    console.log("creating three.js scene");
     glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
-    glScene.init();
-    glScene.animate();
 }
 
 function onLoadingFinished() {
