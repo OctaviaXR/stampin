@@ -15,11 +15,11 @@ class Scene {
         this.hasMouthOpened = false;
     }
 
-    init() {
+    init() { /////
         // camera
         this.initCamera = new THREE.Object3D(); // object that has camera as child
-        // this.initCamera.position.set(-3.2, 1.1, 0.6); // original
-        this.initCamera.position.set(-7.7, 4, 2); // draco
+        this.initCamera.position.set(-3.2, 1.1, 0.6); // original
+        // this.initCamera.position.set(-7.7, 4, 2); // draco
         this.initCamera.rotation.set(0, 0, 0);
         this.initCamera.add(this.camera);
         this.scene.add(this.initCamera);
@@ -31,18 +31,18 @@ class Scene {
 
         // model
         const loader = new THREE.GLTFLoader();
-        var dracoLoader = new THREE.DRACOLoader(); // draco
-        dracoLoader.setDecoderPath("js/libs/draco/"); // draco
-        loader.setDRACOLoader(dracoLoader); // draco
+        // var dracoLoader = new THREE.DRACOLoader(); // draco
+        // dracoLoader.setDecoderPath("js/libs/draco/"); // draco
+        // loader.setDRACOLoader(dracoLoader); // draco
 
-        // const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
-        const url = "assets/models/final-4/yiting-scene.gltf"; // draco
+        const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
+        // const url = "assets/models/final-4/yiting-scene.gltf"; // draco
         loader.load(url, (gltf) => {
-            // const box = new THREE.Box3().setFromObject(gltf.scene); // original
-            // const center = box.getCenter(new THREE.Vector3()); // original
-            // gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
-            // gltf.scene.position.y += (gltf.scene.position.y - center.y); // original
-            // gltf.scene.position.z += (gltf.scene.position.z - center.z); // original
+            const box = new THREE.Box3().setFromObject(gltf.scene); // original
+            const center = box.getCenter(new THREE.Vector3()); // original
+            gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
+            gltf.scene.position.y += (gltf.scene.position.y - center.y); // original
+            gltf.scene.position.z += (gltf.scene.position.z - center.z); // original
             this.scene.add(gltf.scene);
         });
 
