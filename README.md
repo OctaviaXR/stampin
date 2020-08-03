@@ -25,4 +25,5 @@ git lft install
 ```
 git lfs migrate info  //this is to sort big file sizes 
 git lfs migrate import --include="*.mp3.ogg.mp4.bin"// put in your example file sizes 
+git add .gitattributes
 ```
