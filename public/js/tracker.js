@@ -54,6 +54,10 @@ async function renderPrediction() {
             // lips
             const lipsUpperInnerCenterY = prediction.annotations.lipsUpperInner[5][1];
             const lipsLowerInnerCenterY = prediction.annotations.lipsLowerInner[5][1];
+            
+            //if mouth is open, do something - how do you link to the scene.js?
+            mouthOpen(lipsUpperInnerCenterY,lipsLowerInnerCenterY);
+
             window.nomalizedMouth = lerp(window.nomalizedMouth, map(lipsLowerInnerCenterY - lipsUpperInnerCenterY, 0, VIDEO_HEIGHT / 4, 0, 1) / nomalizedPositionZ, lerpAmount);
 
             // calculate yaw, pitch, roll
@@ -95,6 +99,14 @@ async function renderPrediction() {
     requestAnimationFrame(renderPrediction);
 }
 
+async function mouthOpen(upperLip,lowerLip){
+    if (upperLip-lowerLip>0.2){
+        return true;
+    }else{
+        return false;
+    }
+
+}
 async function trackerMain() {
     var info = document.getElementById("info");
     info.innerHTML = "loading...";
