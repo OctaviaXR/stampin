@@ -58,7 +58,6 @@ class Scene {
         const videoFileLeft2 = document.getElementById('videoFileLeft2');
         const videoFileLeft3 = document.getElementById('videoFileLeft3');
         //theater vid - should replace the demo vid 
-        this.addVideoPlaneMeshes(videoFile, 0.4, 0.2, -3.305, 1.42, -0.05, 0, 0, 0, true);
 
         // sky vid
         this.addVideoPlaneMeshes(videoFileLeft, 0.7, 0.7, -4.04, 1.32, 0.6, 0, Math.PI / 2, 0, false);
@@ -101,6 +100,11 @@ class Scene {
         const cameraRotationZDeg = this.roll * cameraRotationZAmount;
         this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
 
+        if(currentTheme==3){
+            this.addVideoPlaneMeshes(videoFile, 0.4, 0.2, -3.305, 1.42, -0.05, 0, 0, 0, true);
+            this.camera.position.set(0,0.3,-0.2);
+            // this.camera.zoom(1.2);
+        }
         // if mouth is opened during the theme 1
         if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
             console.log("mouth is opened during the theme 1");
@@ -108,10 +112,11 @@ class Scene {
 
             //should figure out the opacity of the video texture - create overlay effect would be better 
             // rain-window - hover on top + paintings 
-
-            this.addVideoPlaneMeshes(videoFileLeft2, 0.7, 0.7, -4.03, 1.32, 0.6, 0, Math.PI / 2, 0, false);
-            this.addVideoPlaneMeshes(videoFileLeft3, 0.7, 0.7, -4.02, 1.32, 0.6, 0, Math.PI / 2, 0, false);
-
+       
+            this.addVideoPlaneMeshes(videoFileLeft2,0.7,0.7, -4.02, 1.32, 0.637, 0, Math.PI / 2, 0, false);
+            setTimeout(() => {
+                this.addVideoPlaneMeshes(videoFileLeft3, 1.5, 1.5, -4.018, 1.29, 0.637, 0, Math.PI / 2, 0, false);
+            },4000);
         }
         this.renderer.render(this.scene, this.camera);
     }
@@ -128,17 +133,23 @@ class Scene {
         videoTexture.minFilter = THREE.LinearFilter;
         videoTexture.magFilter = THREE.LinearFilter;
         videoTexture.format = THREE.RGBFormat;
+        // videoTexture.format = THREE.RGBAFormat;
         videoTexture.crossOrigin = "anonymous";
 
         const videoWidth = w;
         const videoHeight = h;
 
-        // make la
+        // make planematerial
+        var planeMaterial = new THREE.MeshBasicMaterial({ 
+            map: videoTexture
+            // opacity: 0.1
+        })
+            // opacity: 0.1
+      
+
         const videoPlaneMesh = new THREE.Mesh(
             new THREE.PlaneGeometry(videoWidth, videoHeight),
-            new THREE.MeshBasicMaterial({
-                map: videoTexture
-            })
+            planeMaterial
         );
 
         videoPlaneMesh.position.set(posX, posY, posZ);
