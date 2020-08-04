@@ -78,7 +78,8 @@
         <div class="wrapper">
             <H2>Let's begin here.</H2>
             <!-- note: auto play doesn't seem to work in Chrome when deployed in heroku -->
-            <audio id="audioPlayer" controls autoplay>
+            <!-- deleted autoplay -->
+            <audio id="audioPlayer" controls>
                     <source src="assets/sound/Stamping in the Graveyard (Electric Dreams Final).mp3" type="audio/mp3">
                 <div style="border: 1px solid gray ; padding: 8px ;">
                     Sorry, your browser does not support the <audio> tag used in this demo.
@@ -87,6 +88,7 @@
         </div>
     </div>
 
+    <!-- need theater and door vid  -->
     <video id="videoFile" playsinline style="display:none">
         <source src="assets/video/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
@@ -98,7 +100,7 @@
     <!-- change the individual opacity -->
     <!-- rainwindow -->
     <video id="videoFileLeft2" playsinline style="display:none" style="opacity: 0.4">
-        <source src="assets/video/window-rain.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        <source src="assets/video/EditedRainVid.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
     <!-- calligraphy -->
     <video id="videoFileLeft3" playsinline style="display:none" style="opacity: 0.4">

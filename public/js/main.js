@@ -42,58 +42,58 @@ function playafter30mins() {
             this.currentTime = 3;
 
         }, false);
-        
+
         videoFileLeft2.play();
         videoFileLeft2.muted = true; // mute audio 
         videoFileLeft2.addEventListener("play", function () {
             this.currentTime = 3;
 
         }, false);
-            videoFileLeft3.play();
-            videoFileLeft3.muted = true; // mute audio 
-            videoFileLeft3.addEventListener("play", function () {
-                this.currentTime = 3;
+        videoFileLeft3.play();
+        videoFileLeft3.muted = true; // mute audio 
+        videoFileLeft3.addEventListener("play", function () {
+            this.currentTime = 3;
 
-            }, false);
+        }, false);
 
-    }, 5000);//5000  // 1000 // the theater should be played very late - 1 min before the audio ends 
-    
+    }, 1000);//5000  // 1000 // the theater should be played very late - 1 min before the audio ends 
+
     // rotate the camera view on each theme
 
-    const duration = 3000;//3000 //1000
+    const duration = 800;//3000 //1000
     const easing = TWEEN.Easing.Cubic.InOut;
 
     // theme 1: left : first 1 mins 
     setTimeout(() => {
         currentTheme = 1;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(90) }, duration).easing(easing).start();
-    }, 40000);//40000 //400
+    }, 400);//40000 //400
 
-    // theme 2: front
-
+    // theme 2: front - original 
     // theme 2: should be righht - deserted town 
 
     setTimeout(() => {
         currentTheme = 2;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(-90) }, duration).easing(easing).start();
-    }, 65000);//65000 //2000
+    }, 6000);//65000 //2000
 
-    // theme 3: right
-
+    // theme 3: right - original 
     // theme 3: front
-
+    // make the camera zoom to look at the screen as the target 
     setTimeout(() => {
         currentTheme = 3;
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(0) }, duration).easing(easing).start();
-       
-    //   glScene.initCamera.zoom(1.2);
-        // new TWEEN.Tween(glScene.initCamera.position.set(0,10,0);
-        // ).to(10, duration).easing(easing).start();
+        // new TWEEN.Tween(glScene.initCamera.position.set(0, 0.5, 0)).easing(easing).start();
 
-    }, 175000);//175000 //3000
+    }, 9000);//175000 //3000;
+    // new TWEEN.Tween(glScene.initCamera.position).to({ y: THREE.Math.degToRad(0) }, duration).easing(easing).start();       });
 
+    // new TWEEN.Tween(glScene.initCamera.zoom(1.2));
+    // new TWEEN.Tween(glScene.initCamera.position.set(0,10,0));
+    // ).to(10, duration).easing(easing).start();
 
 }
+
 //when the loading finished, dont play the audio file until the previous audio is played 
 // play the audio file
 // load the model while listening to the audioplayer 
@@ -116,8 +116,8 @@ function onlyexperience() {
     // videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
     trackerMain();
 }
-//original function 
 
+//original function 
 function auidoandvideo() {
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.addEventListener("ended", function () {

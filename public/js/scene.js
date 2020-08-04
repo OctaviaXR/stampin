@@ -57,13 +57,17 @@ class Scene {
         const videoFileLeft = document.getElementById('videoFileLeft');
         const videoFileLeft2 = document.getElementById('videoFileLeft2');
         const videoFileLeft3 = document.getElementById('videoFileLeft3');
+ 
         //theater vid - should replace the demo vid 
 
-        // sky vid
+        // airplane vid 
         this.addVideoPlaneMeshes(videoFileLeft, 0.7, 0.7, -4.04, 1.32, 0.6, 0, Math.PI / 2, 0, false);
 
         //theater vid 
+        if(currentTheme==3){
+            this.addVideoPlaneMeshes(videoFile, 0.7, 0.7, -4.04, 1.32, 0.6, 0, Math.PI / 2, 0, true);
 
+        }
         // events
         window.addEventListener("resize", () => {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -102,7 +106,7 @@ class Scene {
 
         if(currentTheme==3){
             this.addVideoPlaneMeshes(videoFile, 0.4, 0.2, -3.305, 1.42, -0.05, 0, 0, 0, true);
-            this.camera.position.set(0,0.3,-0.2);
+            // this.camera.position.set(0,0.3,-0.2);
             // this.camera.zoom(1.2);
         }
         // if mouth is opened during the theme 1
@@ -116,7 +120,7 @@ class Scene {
             this.addVideoPlaneMeshes(videoFileLeft2,0.7,0.7, -4.02, 1.32, 0.637, 0, Math.PI / 2, 0, false);
             setTimeout(() => {
                 this.addVideoPlaneMeshes(videoFileLeft3, 1.5, 1.5, -4.018, 1.29, 0.637, 0, Math.PI / 2, 0, false);
-            },4000);
+            },1000);//4000
         }
         this.renderer.render(this.scene, this.camera);
     }
@@ -142,9 +146,11 @@ class Scene {
         // make planematerial
         var planeMaterial = new THREE.MeshBasicMaterial({ 
             map: videoTexture
-            // opacity: 0.1
+            // blending: THREE.Overlay,
+            // transparent: true,
+            // opacity: 0.3
         })
-            // opacity: 0.1
+     
       
 
         const videoPlaneMesh = new THREE.Mesh(
