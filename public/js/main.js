@@ -12,6 +12,7 @@ function createScene() {
 function onLoadingFinished() {
 
     // change the div states
+    document.getElementById("audioContainer").style.display = "none";
     document.getElementById("info").style.display = "none";
     document.getElementById("main").style.display = "block";
 
