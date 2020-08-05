@@ -23,10 +23,3 @@ function lerp(start, stop, amount) {
 function radians_to_degrees(radians) {
     return radians * (180 / Math.PI);
 }
-
-//TODO: Apply isMobile returned bools to Device modes
-function isMobile() {
-    const isAndroid = /Android/i.test(navigator.userAgent);
-    const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-    return isAndroid || isiOS;
-}

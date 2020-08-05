@@ -26,11 +26,8 @@ class Scene {
             gltf.scene.position.y += (gltf.scene.position.y - center.y);
             gltf.scene.position.z += (gltf.scene.position.z - center.z);
             this.scene.add(gltf.scene);
-
-            // start the scene
-            this.init();
-            this.animate();
-            onLoadingFinished();
+            this.isReady = true;
+            console.log("GLTF model is loaded");
         });
     }
 

@@ -1,22 +1,16 @@
-// variable to store our three.js scene:
+// variable to store our three.js scene
 let glScene;
 let currentTheme = 0;
-
-function createScene() {
-    // initialize three.js scene
-    console.log("creating three.js scene");
-    glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
-}
 
 // called after audio and gltf assets are loaded
 function onLoadingFinished() {
 
-    // change the div states
-    document.getElementById("info").style.display = "none";
-    document.getElementById("main").style.display = "block";
-
     // play mach1 audio
     Play();
+
+    // start the scene
+    glScene.init();
+    glScene.animate();
 
     // play window video
     const windowVideo = document.getElementById("windowVideo");
@@ -61,16 +55,40 @@ function onLoadingFinished() {
     }, theme1MouthOpenMaxTime);
 }
 
+// entry point
 document.addEventListener('DOMContentLoaded', () => {
+    // initialize three.js scene
+    console.log("creating three.js scene");
+    glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
+
+    // detect when audio playback has ended
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.addEventListener("ended", function () {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
         audioPlayer.src = ""; // make it no longer playable
-        document.getElementById("audioContainer").style.display = "none";
-        const videoContainer = document.getElementById("videoContainer");
-        videoContainer.style.display = "block";
-        videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
-        trackerMain();
+
+        // wait for all assets to be ready
+        const assetsTimer = setInterval(function () {
+            if (sound.isReady && glScene.isReady) {
+                clearInterval(assetsTimer);
+                document.getElementById("footer").style.display = "none";
+                const videoContainer = document.getElementById("videoContainer");
+                videoContainer.style.display = "block";
+                videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
+                trackerMain(); // this will take a while (loading...)
+
+                // wait for tracker to be ready
+                const trackerTimer = setInterval(function () {
+                    if (tracker.isReady) {
+                        clearInterval(trackerTimer);
+                        document.getElementById("audioContainer").style.display = "none";
+                        document.getElementById("info").style.display = "none";
+                        document.getElementById("main").style.display = "block";
+                        onLoadingFinished();
+                    }
+                }, 100);
+            }
+        }, 100);
     });
 })

@@ -1,23 +1,19 @@
 const VIDEO_WIDTH = 640;
 const VIDEO_HEIGHT = 480;
-
 let model, videoWidth, videoHeight, video, canvas;
-
-const mobile = isMobile();
+let tracker = { isReady: false };
 
 async function setupCamera() {
     video = document.getElementById("video");
-
     const stream = await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
             facingMode: "user",
-            width: mobile ? undefined : VIDEO_WIDTH,
-            height: mobile ? undefined : VIDEO_HEIGHT,
+            width: VIDEO_WIDTH,
+            height: VIDEO_HEIGHT,
         },
     });
     video.srcObject = stream;
-
     return new Promise((resolve) => {
         video.onloadedmetadata = () => {
             resolve(video);
@@ -92,39 +88,29 @@ async function renderPrediction() {
             window.roll = roll * parseFloat(controls.rollMultiplier);
         });
     }
+    if (!tracker.isReady) {
+        console.log("tracker is ready");
+        tracker.isReady = true;
+    }
     requestAnimationFrame(renderPrediction);
 }
 
 async function trackerMain() {
-    document.getElementById("main").style.display = "none";
-    document.getElementById("webcam").style.display = "none";
-
     await tf.setBackend("webgl");
-
     await setupCamera();
     video.play();
     videoWidth = video.videoWidth;
     videoHeight = video.videoHeight;
     video.width = videoWidth;
     video.height = videoHeight;
-
     canvas = document.getElementById("output");
     canvas.width = videoWidth;
     canvas.height = videoHeight;
     canvas.style.display = "none"; // hide the canvas
     const canvasContainer = document.querySelector(".canvas-wrapper");
     canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
-
     model = await facemesh.load({
         maxFaces: 1
     });
     renderPrediction();
-
-    // wait for loaded audio
-    var timer = setInterval(function () {
-        if (sound.isReady) {
-            clearInterval(timer);
-            createScene();
-        }
-    }, 1000);
 }
