@@ -73,6 +73,7 @@ function onLoadingFinished() {
         windowVideo.pause();
         overlayedVideo.pause();
         document.getElementById("guide").innerHTML = "";
+        document.getElementById("audioPlayer").src = ""; // make the player not playable
         document.getElementById("videoContainer").style.display = "none";
         document.getElementById("audioContainer").style.display = "block";
         document.getElementById("info").style.display = "flex";
@@ -94,11 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
     audioPlayer.addEventListener("ended", function () {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
-        if (AudioContext === false) {
-            alert("The Web Audio API is not supported in this browser.\nPlease try it in the latest version of Chrome or Firefox.");
+
+        // check if the browser is supported
+        if (!checkSupport()) {
             return;
         }
-        audioPlayer.src = ""; // make the player not playable
 
         // wait for all assets to be ready
         const assetsTimer = setInterval(function () {
