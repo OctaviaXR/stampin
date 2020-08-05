@@ -73,7 +73,6 @@ function onLoadingFinished() {
         windowVideo.pause();
         overlayedVideo.pause();
         document.getElementById("guide").innerHTML = "";
-        document.getElementById("audioPlayer").src = ""; // make the player not playable
         document.getElementById("videoContainer").style.display = "none";
         document.getElementById("audioContainer").style.display = "block";
         document.getElementById("info").style.display = "flex";
@@ -100,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!checkSupport()) {
             return;
         }
+        audioPlayer.src = ""; // make the player not playable
 
         // wait for all assets to be ready
         const assetsTimer = setInterval(function () {
