@@ -117,7 +117,7 @@ class Scene {
         this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
 
         // if mouth is opened during the theme 1
-        if (currentTheme == 1 && (window.nomalizedMouth > 0.2 && !this.hasMouthOpened) || this.forceMouthOpen) {
+        if (currentTheme == 1 && ((window.nomalizedMouth > 0.2 && !this.hasMouthOpened) || this.forceMouthOpen)) {
 
             // make overlayed video mesh visible
             const overlayedVideoMesh = this.scene.getObjectByName(this.overlayedVideoName);
