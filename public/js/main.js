@@ -42,7 +42,7 @@ function onLoadingFinished() {
     // if the user has not opened the mouth
     setTimeout(() => {
         if (currentTheme == 1 && !glScene.hasMouthOpened) {
-            glScene.forceMouthOpen = true;
+            glScene.playOverLayedVideo();
         }
     }, 30000);
 }

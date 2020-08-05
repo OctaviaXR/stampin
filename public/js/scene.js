@@ -15,7 +15,6 @@ class Scene {
         this.windowVideoName = "windowVideo";
         this.overlayedVideoName = "overlayedVideo";
         this.hasMouthOpened = false;
-        this.forceMouthOpen = false;
 
         // model
         const loader = new THREE.GLTFLoader();
@@ -88,6 +87,36 @@ class Scene {
         this.scene.add(windowVideoMesh);
     }
 
+    playOverLayedVideo() {
+        // make overlayed video mesh visible
+        const overlayedVideoMesh = this.scene.getObjectByName(this.overlayedVideoName);
+        overlayedVideoMesh.visible = true;
+
+        // play overlayed video
+        const overlayedVideo = document.getElementById(this.overlayedVideoName);
+        overlayedVideo.play();
+        overlayedVideo.muted = true;
+        overlayedVideo.loop = false;
+        overlayedVideo.addEventListener("play", function () {
+            this.currentTime = 3;
+        }, false);
+
+        // make window video mesh invisible
+        const windowVideoMesh = this.scene.getObjectByName(this.windowVideoName);
+        windowVideoMesh.visible = false;
+
+        // pause window video
+        const windowVideo = document.getElementById(this.windowVideoName);
+        windowVideo.pause();
+
+        // called after overlayed video ends
+        overlayedVideo.addEventListener("ended", function () {
+            windowVideo.play();
+            windowVideoMesh.visible = true;
+            overlayedVideoMesh.visible = false;
+        }, false);
+    }
+
     animate() {
         requestAnimationFrame(() => this.animate());
         TWEEN.update();
@@ -117,38 +146,9 @@ class Scene {
         this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
 
         // if mouth is opened during the theme 1
-        if (currentTheme == 1 && ((window.nomalizedMouth > 0.2 && !this.hasMouthOpened) || this.forceMouthOpen)) {
-
-            // make overlayed video mesh visible
-            const overlayedVideoMesh = this.scene.getObjectByName(this.overlayedVideoName);
-            overlayedVideoMesh.visible = true;
-
-            // play overlayed video
-            const overlayedVideo = document.getElementById(this.overlayedVideoName);
-            overlayedVideo.play();
-            overlayedVideo.muted = true;
-            overlayedVideo.loop = false;
-            overlayedVideo.addEventListener("play", function () {
-                this.currentTime = 3;
-            }, false);
-
-            // make window video mesh invisible
-            const windowVideoMesh = this.scene.getObjectByName(this.windowVideoName);
-            windowVideoMesh.visible = false;
-
-            // pause window video
-            const windowVideo = document.getElementById(this.windowVideoName);
-            windowVideo.pause();
-
-            // called after overlayed video ends
-            overlayedVideo.addEventListener("ended", function () {
-                windowVideo.play();
-                windowVideoMesh.visible = true;
-                overlayedVideoMesh.visible = false;
-            }, false);
-
+        if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
+            this.playOverLayedVideo();
             this.hasMouthOpened = true;
-            this.forceMouthOpen = false;
         }
         this.renderer.render(this.scene, this.camera);
     }
