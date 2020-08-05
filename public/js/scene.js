@@ -2,8 +2,7 @@ class Scene {
     constructor(rendererWidth, rendererHeight, backgroundColor) {
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(75, rendererWidth / rendererHeight, 0.001, 1000);
-        // this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer = new THREE.WebGLRenderer({ antialias: false }); //faster render
+        this.renderer = new THREE.WebGLRenderer({ antialias: false });
         this.renderer.setSize(rendererWidth, rendererHeight);
         this.renderer.setClearColor(backgroundColor);
         document.getElementById("3dview").appendChild(this.renderer.domElement);
@@ -13,6 +12,8 @@ class Scene {
         this.fYaw = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.fPitch = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.fRoll = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
+        this.windowVideoName = "windowVideo";
+        this.overlayedVideoName = "overlayedVideo";
         this.hasMouthOpened = false;
         this.forceMouthOpen = false;
 
@@ -48,15 +49,28 @@ class Scene {
         this.scene.add(this.light);
 
         // window video
-        const windowVideoWidth = 0.7;
-        const windowVideoHeight = 0.7;
-        const windowVideoPositionX = -4.04;
-        const windowVideoPositionY = 1.32;
-        const windowVideoPositionZ = 0.6;
+        this.addWindowVideoMesh(this.windowVideoName, true);
+
+        // overlayed video
+        this.addWindowVideoMesh(this.overlayedVideoName, false);
+
+        // events
+        window.addEventListener("resize", () => {
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+        });
+    }
+
+    addWindowVideoMesh(name, visible) {
+        const windowVideoWidth = 0.68;
+        const windowVideoHeight = 0.68;
+        const windowVideoPositionX = -4.05;
+        const windowVideoPositionY = 1.357;
+        const windowVideoPositionZ = 0.65;
         const windowVideoRotationYRad = THREE.Math.degToRad(90);
-        const windowVideo = document.getElementById("windowVideo");
+        const windowVideo = document.getElementById(name);
         const windowVideoTexture = new THREE.VideoTexture(windowVideo);
-        windowVideoTexture.needsUpdate;
         windowVideoTexture.minFilter = THREE.LinearFilter;
         windowVideoTexture.magFilter = THREE.LinearFilter;
         windowVideoTexture.format = THREE.RGBFormat;
@@ -69,36 +83,9 @@ class Scene {
         );
         windowVideoMesh.position.set(windowVideoPositionX, windowVideoPositionY, windowVideoPositionZ);
         windowVideoMesh.rotation.set(0, windowVideoRotationYRad, 0);
-        windowVideoMesh.name = "windowVideoMesh";
-        windowVideoMesh.visible = true;
+        windowVideoMesh.name = name;
+        windowVideoMesh.visible = visible;
         this.scene.add(windowVideoMesh);
-
-        // overlayed video
-        const overlayedVideo = document.getElementById("overlayedVideo");
-        const overlayedVideoTexture = new THREE.VideoTexture(overlayedVideo);
-        overlayedVideoTexture.needsUpdate;
-        overlayedVideoTexture.minFilter = THREE.LinearFilter;
-        overlayedVideoTexture.magFilter = THREE.LinearFilter;
-        overlayedVideoTexture.format = THREE.RGBFormat;
-        overlayedVideoTexture.crossOrigin = "anonymous";
-        const overlayedVideoMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(windowVideoWidth, windowVideoHeight),
-            new THREE.MeshBasicMaterial({
-                map: overlayedVideoTexture
-            })
-        );
-        overlayedVideoMesh.position.set(windowVideoPositionX, windowVideoPositionY, windowVideoPositionZ);
-        overlayedVideoMesh.rotation.set(0, windowVideoRotationYRad, 0);
-        overlayedVideoMesh.name = "overlayedVideoMesh";
-        overlayedVideoMesh.visible = false;
-        this.scene.add(overlayedVideoMesh);
-
-        // events
-        window.addEventListener("resize", () => {
-            this.renderer.setSize(window.innerWidth, window.innerHeight);
-            this.camera.aspect = window.innerWidth / window.innerHeight;
-            this.camera.updateProjectionMatrix();
-        });
     }
 
     animate() {
@@ -133,11 +120,11 @@ class Scene {
         if (currentTheme == 1 && (window.nomalizedMouth > 0.2 && !this.hasMouthOpened) || this.forceMouthOpen) {
 
             // make overlayed video mesh visible
-            const overlayedVideoMesh = this.scene.getObjectByName("overlayedVideoMesh");
+            const overlayedVideoMesh = this.scene.getObjectByName(this.overlayedVideoName);
             overlayedVideoMesh.visible = true;
 
             // play overlayed video
-            const overlayedVideo = document.getElementById("overlayedVideo");
+            const overlayedVideo = document.getElementById(this.overlayedVideoName);
             overlayedVideo.play();
             overlayedVideo.muted = true;
             overlayedVideo.loop = false;
@@ -146,18 +133,17 @@ class Scene {
             }, false);
 
             // make window video mesh invisible
-            const windowVideoMesh = this.scene.getObjectByName("windowVideoMesh");
+            const windowVideoMesh = this.scene.getObjectByName(this.windowVideoName);
             windowVideoMesh.visible = false;
 
-            // pause the window video
-            const windowVideo = document.getElementById("windowVideo");
+            // pause window video
+            const windowVideo = document.getElementById(this.windowVideoName);
             windowVideo.pause();
 
-            // called after overlyaed video ends
+            // called after overlayed video ends
             overlayedVideo.addEventListener("ended", function () {
-                console.log("overlayedVideo ended");
-                windowVideoMesh.visible = true;
                 windowVideo.play();
+                windowVideoMesh.visible = true;
                 overlayedVideoMesh.visible = false;
             }, false);
 

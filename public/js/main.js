@@ -9,7 +9,6 @@ function createScene() {
 }
 
 // called after audio and gltf assets are loaded
-// should load it when the web is loaded 
 function onLoadingFinished() {
 
     // change the div states
@@ -48,15 +47,6 @@ function onLoadingFinished() {
     }, 30000);
 }
 
-//when the loading finished, don't play the audio file until the previous audio is played 
-// play the audio file
-// load the model while listening to the audioplayer 
-
-// everything starts from here
-// 1. below listener function is called
-// 2. trackMain() function is called
-// 3. createScene() function is called
-// 4. onLoadingFinished() function is called
 document.addEventListener('DOMContentLoaded', () => {
     const audioPlayer = document.getElementById("audioPlayer");
     audioPlayer.addEventListener("ended", function () {
