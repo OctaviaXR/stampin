@@ -23,19 +23,16 @@
     <script src="js/scene.js"></script>
     <script src="js/main.js"></script>
 
+    <title>Stampin' in the graveyard</title>
     <style type="text/css">
         * {
             padding: 0;
             margin: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            font-size: 16px;
         }
 
         body {
-            font-family: Helvetica, sans-serif;
+            background-color: black;
+            color: white;
             display: block;
         }
 
@@ -49,22 +46,52 @@
         }
 
         .container {
+            margin: 10px 0;
+            padding: 0 100px;
+        }
+
+        .center {
+            display: block;
             margin: 0 auto;
-            height: 100vh;
             width: auto;
+            height: 50vh;
+        }
+
+        h1,
+        h2,
+        p {
             text-align: center;
+            margin: 20px 0;
+        }
+
+        audio {
+            display: block;
+            margin: 0 auto;
+        }
+
+        footer {
+            bottom: 0;
+            width: 100%;
+            /* position: fixed; */
+            background-color: white;
+            color: black;
+            text-align: center;
+            padding: 10px;
         }
 
         #audioContainer {
             display: block;
+            color: white;
+            background-color: black;
         }
 
         #videoContainer {
             display: none;
+            padding: 0 0px;
         }
 
         .wrapper {
-            padding-top: 30vh;
+            padding-top: 10vh;
         }
 
         h2 {
@@ -74,13 +101,23 @@
 </head>
 
 <body>
+    <!-- this will appear in the beginning -->
+    <div class="container">
+        <div id="intro">
+            <h1>Stampin' in the graveyard</h1>
+            <div>
+                <img class="center" src="assets/images/skull.jpeg"
+                    alt="A woman wearing the wonder woman outfit with skull head. Her right hand is lifted up with a hole inside. The background of the piece has galaxy and butterflies.">
+                <P>Artwork by Alexis Price</P>
+            </div>
+        </div>
+    </div>
+
     <div class="container" id="audioContainer">
         <div class="wrapper">
             <H2>Let's begin here.</H2>
-            <!-- note: auto play doesn't seem to work in Chrome when deployed in heroku -->
-            <!-- deleted autoplay -->
             <audio id="audioPlayer" controls>
-                    <source src="assets/sound/Stamping in the Graveyard (Electric Dreams Final).mp3" type="audio/mp3">
+                <source src="assets/audio/stampin.mp3" type="audio/mp3">
                 <div style="border: 1px solid gray ; padding: 8px ;">
                     Sorry, your browser does not support the <audio> tag used in this demo.
                 </div>
@@ -88,30 +125,15 @@
         </div>
     </div>
 
-    <!-- need theater and door vid  -->
-    <video id="videoFile" playsinline style="display:none">
-        <source src="assets/video/sintel.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    <!-- window video -->
+    <video id="windowVideo" playsinline style="display:none">
+        <source src="assets/video/window.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
 
-    <video id="videoFileLeft" playsinline style="display:none">
-        <source src="assets/video/smaller-outsideairplane.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    <!-- overlayed video -->
+    <video id="overlayedVideo" playsinline style="display:none">
+        <source src="assets/video/overlayed.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
     </video>
-
-    <!-- change the individual opacity -->
-    <!-- rainwindow -->
-    <video id="videoFileLeft2" playsinline style="display:none" style="opacity: 0.4">
-        <source src="assets/video/EditedRainVid.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-    </video>
-    <!-- calligraphy -->
-    <video id="videoFileLeft3" playsinline style="display:none" style="opacity: 0.4">
-        <source src="assets/video/calligraphy.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-    </video>
-
-    <!-- <video id="videoFile" playsinline style="display:none">
-        <source src="assets/video/outsideairplane.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-    </video> -->
-
-    <!-- should add theater door video and calligraphy video -->
 
     <!-- this will be visible when audio playback ends -->
     <div class="container" id="videoContainer">
@@ -126,5 +148,7 @@
         <div id="info">loading...</div>
     </div>
 </body>
+
+<footer>Proudly created by Octavia Team.</footer>
 
 </html>

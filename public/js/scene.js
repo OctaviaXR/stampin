@@ -14,21 +14,17 @@ class Scene {
         this.fPitch = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.fRoll = OneEuroFilter(60, 1.0, window.controls.oneEuroFilterBeta, 1.0);
         this.hasMouthOpened = false;
+        this.forceMouthOpen = false;
 
         // model
         const loader = new THREE.GLTFLoader();
-        // var dracoLoader = new THREE.DRACOLoader(); // draco
-        // dracoLoader.setDecoderPath("js/libs/draco/"); // draco
-        // loader.setDRACOLoader(dracoLoader); // draco
-        const url = "assets/models/airbus_a320_airplane_cabin/scene.gltf"; // original
-        // const url = "assets/models/final-4/yiting-scene.gltf"; // draco
+        const url = "assets/models/airplane_cabin/scene.gltf";
         loader.load(url, (gltf) => {
-
-            const box = new THREE.Box3().setFromObject(gltf.scene); // original
-            const center = box.getCenter(new THREE.Vector3()); // original
-            gltf.scene.position.x += (gltf.scene.position.x - center.x); // original
-            gltf.scene.position.y += (gltf.scene.position.y - center.y); // original
-            gltf.scene.position.z += (gltf.scene.position.z - center.z); // original
+            const box = new THREE.Box3().setFromObject(gltf.scene);
+            const center = box.getCenter(new THREE.Vector3());
+            gltf.scene.position.x += (gltf.scene.position.x - center.x);
+            gltf.scene.position.y += (gltf.scene.position.y - center.y);
+            gltf.scene.position.z += (gltf.scene.position.z - center.z);
             this.scene.add(gltf.scene);
 
             // start the scene
@@ -41,8 +37,7 @@ class Scene {
     init() {
         // camera
         this.initCamera = new THREE.Object3D(); // object that has camera as child
-        this.initCamera.position.set(-3.2, 1.1, 0.6); // original
-        // this.initCamera.position.set(-7.7, 4, 2); // draco
+        this.initCamera.position.set(-3.2, 1.1, 0.6);
         this.initCamera.rotation.set(0, 0, 0);
         this.initCamera.add(this.camera);
         this.scene.add(this.initCamera);
@@ -52,22 +47,52 @@ class Scene {
         this.light.position.set(this.initCamera.position.x, this.initCamera.position.y + 1, this.initCamera.position.z);
         this.scene.add(this.light);
 
-        // videos
-        const videoFile = document.getElementById('videoFile');
-        const videoFileLeft = document.getElementById('videoFileLeft');
-        const videoFileLeft2 = document.getElementById('videoFileLeft2');
-        const videoFileLeft3 = document.getElementById('videoFileLeft3');
- 
-        //theater vid - should replace the demo vid 
+        // window video
+        const windowVideoWidth = 0.7;
+        const windowVideoHeight = 0.7;
+        const windowVideoPositionX = -4.04;
+        const windowVideoPositionY = 1.32;
+        const windowVideoPositionZ = 0.6;
+        const windowVideoRotationYRad = THREE.Math.degToRad(90);
+        const windowVideo = document.getElementById("windowVideo");
+        const windowVideoTexture = new THREE.VideoTexture(windowVideo);
+        windowVideoTexture.needsUpdate;
+        windowVideoTexture.minFilter = THREE.LinearFilter;
+        windowVideoTexture.magFilter = THREE.LinearFilter;
+        windowVideoTexture.format = THREE.RGBFormat;
+        windowVideoTexture.crossOrigin = "anonymous";
+        const windowVideoMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(windowVideoWidth, windowVideoHeight),
+            new THREE.MeshBasicMaterial({
+                map: windowVideoTexture
+            })
+        );
+        windowVideoMesh.position.set(windowVideoPositionX, windowVideoPositionY, windowVideoPositionZ);
+        windowVideoMesh.rotation.set(0, windowVideoRotationYRad, 0);
+        windowVideoMesh.name = "windowVideoMesh";
+        windowVideoMesh.visible = true;
+        this.scene.add(windowVideoMesh);
 
-        // airplane vid 
-        this.addVideoPlaneMeshes(videoFileLeft, 0.7, 0.7, -4.04, 1.32, 0.6, 0, Math.PI / 2, 0, false);
+        // overlayed video
+        const overlayedVideo = document.getElementById("overlayedVideo");
+        const overlayedVideoTexture = new THREE.VideoTexture(overlayedVideo);
+        overlayedVideoTexture.needsUpdate;
+        overlayedVideoTexture.minFilter = THREE.LinearFilter;
+        overlayedVideoTexture.magFilter = THREE.LinearFilter;
+        overlayedVideoTexture.format = THREE.RGBFormat;
+        overlayedVideoTexture.crossOrigin = "anonymous";
+        const overlayedVideoMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(windowVideoWidth, windowVideoHeight),
+            new THREE.MeshBasicMaterial({
+                map: overlayedVideoTexture
+            })
+        );
+        overlayedVideoMesh.position.set(windowVideoPositionX, windowVideoPositionY, windowVideoPositionZ);
+        overlayedVideoMesh.rotation.set(0, windowVideoRotationYRad, 0);
+        overlayedVideoMesh.name = "overlayedVideoMesh";
+        overlayedVideoMesh.visible = false;
+        this.scene.add(overlayedVideoMesh);
 
-        //theater vid 
-        if(currentTheme==3){
-            this.addVideoPlaneMeshes(videoFile, 0.7, 0.7, -4.04, 1.32, 0.6, 0, Math.PI / 2, 0, true);
-
-        }
         // events
         window.addEventListener("resize", () => {
             this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -83,7 +108,7 @@ class Scene {
         if (window.pitch != null) this.pitch = this.fPitch.filter(window.pitch);
         if (window.roll != null) this.roll = this.fRoll.filter(window.roll);
 
-        // Apply orientation to decode Mach1 Spatial to Stereo
+        // apply orientation to decode Mach1 Spatial to Stereo
         Decode(this.yaw, this.pitch, this.roll);
 
         // change camera position
@@ -104,78 +129,42 @@ class Scene {
         const cameraRotationZDeg = this.roll * cameraRotationZAmount;
         this.camera.rotation.set(THREE.Math.degToRad(cameraRotationXDeg), THREE.Math.degToRad(-cameraRotationYDeg), THREE.Math.degToRad(cameraRotationZDeg));
 
-        if(currentTheme==3){
-            this.addVideoPlaneMeshes(videoFile, 0.4, 0.2, -3.305, 1.42, -0.05, 0, 0, 0, true);
-            // this.camera.position.set(0,0.3,-0.2);
-            // this.camera.zoom(1.2);
-        }
         // if mouth is opened during the theme 1
-        if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
-            console.log("mouth is opened during the theme 1");
-            this.hasMouthOpened = true;
+        if (currentTheme == 1 && (window.nomalizedMouth > 0.2 && !this.hasMouthOpened) || this.forceMouthOpen) {
 
-            //should figure out the opacity of the video texture - create overlay effect would be better 
-            // rain-window - hover on top + paintings 
-       
-            this.addVideoPlaneMeshes(videoFileLeft2,0.7,0.7, -4.02, 1.32, 0.637, 0, Math.PI / 2, 0, false);
-            setTimeout(() => {
-                this.addVideoPlaneMeshes(videoFileLeft3, 1.5, 1.5, -4.018, 1.29, 0.637, 0, Math.PI / 2, 0, false);
-            },1000);//4000
+            // make overlayed video mesh visible
+            const overlayedVideoMesh = this.scene.getObjectByName("overlayedVideoMesh");
+            overlayedVideoMesh.visible = true;
+
+            // play overlayed video
+            const overlayedVideo = document.getElementById("overlayedVideo");
+            overlayedVideo.play();
+            overlayedVideo.muted = true;
+            overlayedVideo.loop = false;
+            overlayedVideo.addEventListener("play", function () {
+                this.currentTime = 3;
+            }, false);
+
+            // make window video mesh invisible
+            const windowVideoMesh = this.scene.getObjectByName("windowVideoMesh");
+            windowVideoMesh.visible = false;
+
+            // pause the window video
+            const windowVideo = document.getElementById("windowVideo");
+            windowVideo.pause();
+
+            // called after overlyaed video ends
+            overlayedVideo.addEventListener("ended", function () {
+                console.log("overlayedVideo ended");
+                windowVideoMesh.visible = true;
+                windowVideo.play();
+                overlayedVideoMesh.visible = false;
+                overlayedVideoMesh.pause();
+            }, false);
+
+            this.hasMouthOpened = true;
+            this.forceMouthOpen = false;
         }
         this.renderer.render(this.scene, this.camera);
-    }
-
-
-
-    // addVideoPlaneMeshes(videoFile,0.4,0.2,0,0,0,0,Math.PI/2,0,true);
-
-    addVideoPlaneMeshes(video, w, h, posX, posY, posZ, rotX, rotY, rotZ, border) {
-
-        // video plane mesh
-        const videoTexture = new THREE.VideoTexture(video);
-        videoTexture.needsUpdate;
-        videoTexture.minFilter = THREE.LinearFilter;
-        videoTexture.magFilter = THREE.LinearFilter;
-        videoTexture.format = THREE.RGBFormat;
-        // videoTexture.format = THREE.RGBAFormat;
-        videoTexture.crossOrigin = "anonymous";
-
-        const videoWidth = w;
-        const videoHeight = h;
-
-        // make planematerial
-        var planeMaterial = new THREE.MeshBasicMaterial({ 
-            map: videoTexture
-            // blending: THREE.Overlay,
-            // transparent: true,
-            // opacity: 0.3
-        })
-     
-      
-
-        const videoPlaneMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(videoWidth, videoHeight),
-            planeMaterial
-        );
-
-        videoPlaneMesh.position.set(posX, posY, posZ);
-        videoPlaneMesh.rotation.set(rotX, rotY, rotZ);
-
-        this.scene.add(videoPlaneMesh);
-
-        //create a border if it is true
-        if (border) {
-            // video frame plane mesh
-            const videoFramePlaneMesh = new THREE.Mesh(
-                new THREE.PlaneGeometry(videoWidth + 0.02, videoHeight + 0.02),
-                new THREE.MeshBasicMaterial({ color: 0xbebebe })
-            );
-
-            videoFramePlaneMesh.position.set(videoPlaneMesh.position.x, videoPlaneMesh.position.y, videoPlaneMesh.position.z - 0.001);
-
-            this.scene.add(videoFramePlaneMesh);
-        }
-
-
     }
 }
