@@ -21,24 +21,37 @@ function onLoadingFinished() {
 
     // play window video
     const windowVideo = document.getElementById("windowVideo");
-    windowVideo.play();
     windowVideo.muted = true;
     windowVideo.loop = true;
+    windowVideo.play();
     windowVideo.addEventListener("play", function () {
         this.currentTime = 3;
     }, false);
+
+    // play and pause overlayed video (to prevent warning)
+    const overlayedVideo = document.getElementById("overlayedVideo");
+    overlayedVideo.muted = true;
+    overlayedVideo.loop = false;
+    overlayedVideo.play();
+    overlayedVideo.pause();
 
     // rotate the camera view on each theme
     const duration = 3000;
     const easing = TWEEN.Easing.Cubic.InOut;
 
-    // theme 1: left
+    // theme 1: rotate to left and face the window
+    const theme1StartTime = 15000;
+    const theme1MouthOpenMaxTime = 30000;
+
     setTimeout(() => {
-        currentTheme = 1;
         new TWEEN.Tween(glScene.initCamera.position).to({ x: -3.5 }, duration).easing(easing).start();
         new TWEEN.Tween(glScene.initCamera.position).to({ y: 1.3 }, duration).easing(easing).start();
         new TWEEN.Tween(glScene.initCamera.rotation).to({ y: THREE.Math.degToRad(90) }, duration).easing(easing).start();
-    }, 12000);
+    }, theme1StartTime - duration);
+
+    setTimeout(() => {
+        currentTheme = 1;
+    }, theme1StartTime);
 
     // if the user has not opened the mouth
     setTimeout(() => {
@@ -46,7 +59,7 @@ function onLoadingFinished() {
             glScene.playOverLayedVideo();
             glScene.hasMouthOpened = true;
         }
-    }, 30000);
+    }, theme1MouthOpenMaxTime);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

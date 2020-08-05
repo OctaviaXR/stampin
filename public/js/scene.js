@@ -103,8 +103,6 @@ class Scene {
         // play overlayed video
         const overlayedVideo = document.getElementById(this.overlayedVideoName);
         overlayedVideo.play();
-        overlayedVideo.muted = true;
-        overlayedVideo.loop = false;
         overlayedVideo.addEventListener("play", function () {
             this.currentTime = 3;
         }, false);
