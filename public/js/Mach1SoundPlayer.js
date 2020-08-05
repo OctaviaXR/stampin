@@ -1,5 +1,8 @@
 "use strict";
 
+const shouldSupportSafari = false;
+let AudioContext = self.AudioContext || (shouldSupportSafari && self.webkitAudioContext) || false;
+
 let _soundPlayer_preloadCache = {};
 let _soundPlayer_audioCtx = new AudioContext();
 

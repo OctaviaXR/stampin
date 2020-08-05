@@ -2,8 +2,12 @@
 <html>
 
 <head>
+    <title>Stampin' in the graveyard</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="stampin" />
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <meta content="utf-8" http-equiv="encoding" />
+    <link rel='icon' href='assets/favicon/favicon.ico' type='image/x-icon' />
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm/dist/tf-backend-wasm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/facemesh"></script>
@@ -23,7 +27,6 @@
     <script src="js/scene.js"></script>
     <script src="js/main.js"></script>
 
-    <title>Stampin' in the graveyard</title>
     <style type="text/css">
         * {
             padding: 0;
@@ -88,6 +91,10 @@
             display: none;
         }
 
+        #scene {
+            opacity: 0;
+        }
+
         #webcam {
             display: none;
         }
@@ -125,7 +132,7 @@
 
     <div class="container" id="audioContainer">
         <div class="wrapper">
-            <H2>Let's begin here.</H2>
+            <H2 id="guide">Let's begin here.</H2>
             <audio id="audioPlayer" controls>
                 <source src="assets/audio/stampin.mp3" type="audio/mp3">
                 <div style="border: 1px solid gray ; padding: 8px ;">
@@ -148,7 +155,7 @@
     <!-- this will be visible when audio playback ends -->
     <div class="container" id="videoContainer">
         <div id="main">
-            <div class="canvas-wrapper" id="3dview"></div>
+            <div class="canvas-wrapper" id="scene"></div>
             <div class="canvas-wrapper" id="webcam">
                 <canvas id="output"></canvas>
                 <video id="video" playsinline

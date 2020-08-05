@@ -28,15 +28,16 @@ function onLoadingFinished() {
     overlayedVideo.play();
     overlayedVideo.pause();
 
-    // fade in light intensity
-    new TWEEN.Tween(glScene.light).to({ intensity: 2 }, 2000).easing(TWEEN.Easing.Cubic.Out).start();
-
     // rotate the camera view on each theme
     const duration = 3000;
     const easing = TWEEN.Easing.Cubic.InOut;
 
+    // fade in opacity
+    const scene = document.getElementById("scene");
+    new TWEEN.Tween(scene.style).to({ opacity: 1 }, duration).easing(easing).start();
+
     // theme 1: rotate to left and face the window
-    const theme1StartTime = 15000;
+    const theme1StartTime = 14000;
     const theme1MouthOpenMaxTime = 30000;
 
     setTimeout(() => {
@@ -56,6 +57,30 @@ function onLoadingFinished() {
             glScene.hasMouthOpened = true;
         }
     }, theme1MouthOpenMaxTime);
+
+    // handle fade out and end of the scene
+    const sceneEndTime = 310000;
+    const fadeOutDuration = 20000;
+
+    setTimeout(() => {
+        new TWEEN.Tween(scene.style).to({ opacity: 0 }, fadeOutDuration).easing(easing).start();
+    }, sceneEndTime - fadeOutDuration);
+
+    // after fade out is done
+    setTimeout(() => {
+        console.log("the scene has ended");
+        Stop(); // stop mach1 audio
+        windowVideo.pause();
+        overlayedVideo.pause();
+        document.getElementById("guide").innerHTML = "";
+        document.getElementById("videoContainer").style.display = "none";
+        document.getElementById("audioContainer").style.display = "block";
+        document.getElementById("info").style.display = "flex";
+        document.getElementById("main").style.display = "none";
+        document.getElementById("footer").style.display = "block";
+        const intro = document.getElementById("intro");
+        intro.scrollIntoView({ behavior: "smooth" }); // auto scroll to top
+    }, sceneEndTime);
 }
 
 // entry point
@@ -69,7 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     audioPlayer.addEventListener("ended", function () {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
-        audioPlayer.src = ""; // make it no longer playable
+        if (AudioContext === false) {
+            alert("The Web Audio API is not supported in this browser.\nPlease try it in the latest version of Chrome or Firefox.");
+            return;
+        }
+        audioPlayer.src = ""; // make the player not playable
 
         // wait for all assets to be ready
         const assetsTimer = setInterval(function () {

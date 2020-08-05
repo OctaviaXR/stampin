@@ -5,7 +5,7 @@ class Scene {
         this.renderer = new THREE.WebGLRenderer({ antialias: false });
         this.renderer.setSize(rendererWidth, rendererHeight);
         this.renderer.setClearColor(backgroundColor);
-        document.getElementById("3dview").appendChild(this.renderer.domElement);
+        document.getElementById("scene").appendChild(this.renderer.domElement);
         this.yaw = 0;
         this.pitch = 0;
         this.roll = 0;
@@ -40,7 +40,7 @@ class Scene {
         this.scene.add(this.initCamera);
 
         // lighting
-        this.light = new THREE.PointLight(0xFFFFFF, 0);
+        this.light = new THREE.PointLight(0xFFFFFF, 2);
         this.light.position.set(this.initCamera.position.x, this.initCamera.position.y + 1, this.initCamera.position.z);
         this.scene.add(this.light);
 
@@ -51,11 +51,16 @@ class Scene {
         this.addWindowVideoMesh(this.overlayedVideoName, false);
 
         // events
-        window.addEventListener("resize", () => {
+        let onWindowResize = () => {
+            console.log("window resized");
             this.renderer.setSize(window.innerWidth, window.innerHeight);
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
-        });
+        };
+        onWindowResize();
+
+        // events
+        window.addEventListener("resize", onWindowResize);
     }
 
     addWindowVideoMesh(name, visible) {
@@ -106,6 +111,7 @@ class Scene {
 
         // called after overlayed video ends
         overlayedVideo.addEventListener("ended", function () {
+            console.log("overlayed video playback has ended");
             overlayedVideoMesh.visible = false;
             overlayedVideo.pause();
             windowVideoMesh.visible = true;
