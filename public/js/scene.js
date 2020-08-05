@@ -159,7 +159,6 @@ class Scene {
                 windowVideoMesh.visible = true;
                 windowVideo.play();
                 overlayedVideoMesh.visible = false;
-                overlayedVideoMesh.pause();
             }, false);
 
             this.hasMouthOpened = true;
