@@ -88,6 +88,14 @@ class Scene {
     }
 
     playOverLayedVideo() {
+        // make window video mesh invisible
+        const windowVideoMesh = this.scene.getObjectByName(this.windowVideoName);
+        windowVideoMesh.visible = false;
+
+        // pause window video
+        const windowVideo = document.getElementById(this.windowVideoName);
+        windowVideo.pause();
+
         // make overlayed video mesh visible
         const overlayedVideoMesh = this.scene.getObjectByName(this.overlayedVideoName);
         overlayedVideoMesh.visible = true;
@@ -101,19 +109,12 @@ class Scene {
             this.currentTime = 3;
         }, false);
 
-        // make window video mesh invisible
-        const windowVideoMesh = this.scene.getObjectByName(this.windowVideoName);
-        windowVideoMesh.visible = false;
-
-        // pause window video
-        const windowVideo = document.getElementById(this.windowVideoName);
-        windowVideo.pause();
-
         // called after overlayed video ends
         overlayedVideo.addEventListener("ended", function () {
-            windowVideo.play();
-            windowVideoMesh.visible = true;
             overlayedVideoMesh.visible = false;
+            overlayedVideo.pause();
+            windowVideoMesh.visible = true;
+            windowVideo.play();
         }, false);
     }
 

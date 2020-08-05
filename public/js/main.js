@@ -43,6 +43,7 @@ function onLoadingFinished() {
     setTimeout(() => {
         if (currentTheme == 1 && !glScene.hasMouthOpened) {
             glScene.playOverLayedVideo();
+            glScene.hasMouthOpened = true;
         }
     }, 30000);
 }
