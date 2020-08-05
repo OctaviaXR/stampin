@@ -12,7 +12,6 @@ function createScene() {
 function onLoadingFinished() {
 
     // change the div states
-    document.getElementById("audioContainer").style.display = "none";
     document.getElementById("info").style.display = "none";
     document.getElementById("main").style.display = "block";
 
@@ -28,7 +27,7 @@ function onLoadingFinished() {
         this.currentTime = 3;
     }, false);
 
-    // play and pause overlayed video (to prevent warning)
+    // play and pause overlayed video
     const overlayedVideo = document.getElementById("overlayedVideo");
     overlayedVideo.muted = true;
     overlayedVideo.loop = false;
@@ -68,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         audioPlayer.pause();
         audioPlayer.currentTime = 0;
         audioPlayer.src = ""; // make it no longer playable
+        document.getElementById("audioContainer").style.display = "none";
         const videoContainer = document.getElementById("videoContainer");
         videoContainer.style.display = "block";
         videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
