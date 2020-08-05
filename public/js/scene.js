@@ -40,7 +40,7 @@ class Scene {
         this.scene.add(this.initCamera);
 
         // lighting
-        this.light = new THREE.PointLight(0xFFFFFF, 2);
+        this.light = new THREE.PointLight(0xFFFFFF, 0);
         this.light.position.set(this.initCamera.position.x, this.initCamera.position.y + 1, this.initCamera.position.z);
         this.scene.add(this.light);
 

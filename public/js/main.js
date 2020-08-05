@@ -28,6 +28,9 @@ function onLoadingFinished() {
     overlayedVideo.play();
     overlayedVideo.pause();
 
+    // fade in light intensity
+    new TWEEN.Tween(glScene.light).to({ intensity: 2 }, 2000).easing(TWEEN.Easing.Cubic.Out).start();
+
     // rotate the camera view on each theme
     const duration = 3000;
     const easing = TWEEN.Easing.Cubic.InOut;
