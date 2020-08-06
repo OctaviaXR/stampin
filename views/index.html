@@ -43,7 +43,7 @@
 
         .container {
             margin: 10px 0;
-            padding: 0 100px;
+            padding: 20px 100px 0px 100px;
         }
 
         .center {
@@ -58,6 +58,11 @@
         p {
             text-align: center;
             margin: 20px 0;
+        }
+
+        p{
+            font-size:large;
+            line-height: 1.2em;
         }
 
         audio {
@@ -109,11 +114,14 @@
 
         .wrapper {
             padding-top: 10vh;
+            margin: 0 auto;
+
         }
 
         h2 {
             margin-bottom: 20px;
         }
+     
     </style>
 </head>
 
@@ -125,21 +133,21 @@
             <div>
                 <img class="center" src="assets/images/skull.jpeg"
                     alt="A woman wearing the wonder woman outfit with skull head. Her right hand is lifted up with a hole inside. The background of the piece has galaxy and butterflies.">
-                <P>Artwork by Alexis Price</P>
+                <P style="color:gainsboro; font-size:small">Artwork by Alexis Price</P>
             </div>
         </div>
     </div>
 
     <div class="container" id="audioContainer">
-        <div class="wrapper">
+      
             <H2 id="guide">Let's begin here.</H2>
             <audio id="audioPlayer" controls>
-                <source src="assets/audio/stampin.mp3" type="audio/mp3">
+                <source src="assets/audio/stamping_new_compressed.mp3" type="audio/mp3">
                 <div style="border: 1px solid gray ; padding: 8px ;">
                     Sorry, your browser does not support the <audio> tag used in this demo.
                 </div>
             </audio>
-        </div>
+        
     </div>
 
     <!-- window video -->
@@ -163,6 +171,22 @@
             </div>
         </div>
         <div id="info">loading...</div>
+    </div>
+
+    <div id="endingScene" class="container" style="display:none">
+     <p>Thank you for joining us. </p>
+        </p>
+
+        <br>
+        <p> We invite you to create the images you saw in your journey, perhaps in a letter, or a drawing, or a
+            sculpture, or a photograph (whatever a photograph means to you). </p>
+            <p> We also invite you to share this on
+            Instagram with #StampinInTheGraveyard. Together, we will create a collage of images, all windows into the
+            last theatre on earth.
+        </p>
+        <br>
+        <p> See you on the other side.</p>
+
     </div>
 </body>
 

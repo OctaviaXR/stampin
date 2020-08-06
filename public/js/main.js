@@ -59,8 +59,8 @@ function onLoadingFinished() {
     }, theme1MouthOpenMaxTime);
 
     // handle fade out and end of the scene
-    const sceneEndTime = 310000;
-    const fadeOutDuration = 20000;
+    const sceneEndTime = 270000;//310000 - original time - 270000 is perfect!
+    const fadeOutDuration = 2000;
 
     setTimeout(() => {
         new TWEEN.Tween(scene.style).to({ opacity: 0 }, fadeOutDuration).easing(easing).start();
@@ -78,8 +78,10 @@ function onLoadingFinished() {
         document.getElementById("info").style.display = "flex";
         document.getElementById("main").style.display = "none";
         document.getElementById("footer").style.display = "block";
-        const intro = document.getElementById("intro");
-        intro.scrollIntoView({ behavior: "smooth" }); // auto scroll to top
+        const ending = document.getElementById('endingScene').style.display = "block";
+        ending.scrollIntoView({ behavior: "smooth" });//auto scroll to end
+        // const intro = document.getElementById("intro");
+        // intro.scrollIntoView({ behavior: "smooth" }); // auto scroll to top
     }, sceneEndTime);
 }
 
@@ -121,7 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         onLoadingFinished();
                     }
                 }, 100);
+
             }
         }, 100);
     });
+
+
 })
