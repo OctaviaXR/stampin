@@ -151,6 +151,7 @@ class Scene {
         if (currentTheme == 1 && window.nomalizedMouth > 0.2 && !this.hasMouthOpened) {
             this.playOverLayedVideo();
             this.hasMouthOpened = true;
+
         }
         this.renderer.render(this.scene, this.camera);
     }
