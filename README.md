@@ -18,7 +18,7 @@ This is good for large file sizes. For Mac Users, please follow the steps below 
 ```
 brew update 
 brew install git-lfs
-git lft install 
+git lfs install 
 ```
 
 2. Then go to your repo.
