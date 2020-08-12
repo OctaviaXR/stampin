@@ -74,12 +74,13 @@ function onLoadingFinished() {
         overlayedVideo.pause();
         document.getElementById("guide").innerHTML = "";
         document.getElementById("videoContainer").style.display = "none";
-        document.getElementById("audioContainer").style.display = "block";
-        document.getElementById("info").style.display = "flex";
+        // document.getElementById("audioContainer").style.display = "block";
+        // document.getElementById("info").style.display = "flex";
         document.getElementById("main").style.display = "none";
         document.getElementById("footer").style.display = "block";
-        const ending = document.getElementById('endingScene').style.display = "block";
-        ending.scrollIntoView({ behavior: "smooth" });//auto scroll to end
+        // const ending = document.getElementById('endingScene').style.display = "block";
+        // ending.scrollIntoView({ behavior: "smooth" });//auto scroll to end
+
         // const intro = document.getElementById("intro");
         // intro.scrollIntoView({ behavior: "smooth" }); // auto scroll to top
     }, sceneEndTime);
@@ -92,22 +93,22 @@ document.addEventListener('DOMContentLoaded', () => {
     glScene = new Scene(window.innerWidth, window.innerHeight, "#535353");
 
     // detect when audio playback has ended
-    const audioPlayer = document.getElementById("audioPlayer");
-    audioPlayer.addEventListener("ended", function () {
-        audioPlayer.pause();
-        audioPlayer.currentTime = 0;
+    // const audioPlayer = document.getElementById("audioPlayer");
+    // audioPlayer.addEventListener("ended", function () {
+    //     audioPlayer.pause();
+    //     audioPlayer.currentTime = 0;
 
-        // check if the browser is supported
-        if (!checkSupport()) {
-            return;
-        }
-        audioPlayer.src = ""; // make the player not playable
+    //     // check if the browser is supported
+    //     if (!checkSupport()) {
+    //         return;
+    //     }
+    //     audioPlayer.src = ""; // make the player not playable
 
         // wait for all assets to be ready
         const assetsTimer = setInterval(function () {
             if (sound.isReady && glScene.isReady) {
                 clearInterval(assetsTimer);
-                document.getElementById("footer").style.display = "none";
+                // document.getElementById("footer").style.display = "none";
                 const videoContainer = document.getElementById("videoContainer");
                 videoContainer.style.display = "block";
                 videoContainer.scrollIntoView({ behavior: "smooth" }); // auto scroll to bottom
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const trackerTimer = setInterval(function () {
                     if (tracker.isReady) {
                         clearInterval(trackerTimer);
-                        document.getElementById("audioContainer").style.display = "none";
+                        // document.getElementById("audioContainer").style.display = "none";
                         document.getElementById("info").style.display = "none";
                         document.getElementById("main").style.display = "block";
                         onLoadingFinished();
@@ -129,4 +130,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-})
+// })
